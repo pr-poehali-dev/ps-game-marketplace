@@ -53,8 +53,8 @@ const Index = () => {
                 <Icon name="Gamepad2" size={16} className="text-black" />
               </div>
               <span className="font-orbitron text-base font-bold">
-                <span className="neon-text-blue">GAME</span>
-                <span className="text-white">ZONE</span>
+                <span className="neon-text-blue">GudBuy</span>
+                <span className="text-white"> Game</span>
               </span>
               <span className="hidden sm:block font-orbitron text-gray-600 ml-1 mt-0.5" style={{ fontSize: "0.6rem", letterSpacing: "0.1em" }}>
                 PlayStation Store
@@ -192,8 +192,8 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <span className="font-orbitron text-sm font-bold">
-                <span className="neon-text-blue">GAME</span>
-                <span className="text-gray-600">ZONE</span>
+                <span className="neon-text-blue">GudBuy</span>
+                <span className="text-gray-600"> Game</span>
               </span>
               <span className="text-gray-700 font-rajdhani text-xs">© 2026</span>
             </div>
