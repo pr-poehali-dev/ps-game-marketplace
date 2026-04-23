@@ -1,88 +1,161 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
+// Цены с PS Store Турция, курс 1 ₺ = 3 ₽
 const GAMES = [
   {
     id: 1,
-    title: "Neon Shadows: Cyberpunk",
-    genre: "Экшн",
+    title: "EA SPORTS FC™ 26 Ultimate Edition",
+    genre: "Спорт",
     platform: "PS5",
-    price: 4990,
-    rentPrice: 390,
-    rating: 4.8,
-    reviews: 2341,
-    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/92c062d7-8191-44f8-b711-cc75737077e3.jpg",
+    price: 12000, // 4.000 ₺ × 3
+    rentPrice: 490,
+    rating: 4.2,
+    reviews: 18432,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/39baf1bd-cda7-4ef1-85fc-456c9318a099.jpg",
     isNew: true,
-    discount: 0,
+    discount: 60, // скидка с сайта
+    originalTL: 4000,
+    saleTL: 1600,
   },
   {
     id: 2,
-    title: "Velocity Rush X",
-    genre: "Гонки",
+    title: "Ghost of Tsushima: Directors Cut",
+    genre: "Экшн",
     platform: "PS5",
-    price: 3490,
-    rentPrice: 290,
-    rating: 4.5,
-    reviews: 1876,
-    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/e49871f6-d13c-436f-b48c-f2aedf029c88.jpg",
+    price: 2097, // 699 ₺ × 3
+    rentPrice: 199,
+    rating: 4.9,
+    reviews: 54210,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/acfa755b-8ae5-4537-914a-2802628eb634.jpg",
     isNew: false,
-    discount: 20,
+    discount: 50,
+    originalTL: 699,
+    saleTL: 350,
   },
   {
     id: 3,
-    title: "Dragon Realm: Origins",
-    genre: "РПГ",
-    platform: "PS4",
-    price: 2990,
-    rentPrice: 249,
-    rating: 4.9,
-    reviews: 5432,
-    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/ab382fa3-cfa9-4a8d-8fb4-c887528a3680.jpg",
-    isNew: false,
-    discount: 0,
+    title: "Stellar Blade Complete Edition",
+    genre: "Экшн",
+    platform: "PS5",
+    price: 12897, // 4.299 ₺ × 3
+    rentPrice: 590,
+    rating: 4.7,
+    reviews: 22100,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/a6165a1b-2c71-46fd-85e5-c7fe84a5828e.jpg",
+    isNew: true,
+    discount: 40,
+    originalTL: 4299,
+    saleTL: 2579,
   },
   {
     id: 4,
-    title: "Strike Force: Arena",
-    genre: "Спорт",
+    title: "Alan Wake 2",
+    genre: "Хоррор",
     platform: "PS5",
-    price: 3990,
-    rentPrice: 329,
-    rating: 4.3,
-    reviews: 987,
-    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/4769e004-9873-4bd2-96b8-477aea3b21cc.jpg",
-    isNew: true,
+    price: 989, // ~329,70 ₺ × 3
+    rentPrice: 149,
+    rating: 4.6,
+    reviews: 31780,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/6ec256ba-fd6c-488b-be40-238f78e4c5eb.jpg",
+    isNew: false,
     discount: 0,
+    originalTL: 330,
+    saleTL: 330,
   },
   {
     id: 5,
-    title: "Dark Void: Reborn",
+    title: "Grand Theft Auto V",
     genre: "Экшн",
-    platform: "PS4",
-    price: 1990,
+    platform: "PS5",
+    price: 2097, // 699 ₺ × 3
     rentPrice: 179,
-    rating: 4.1,
-    reviews: 654,
-    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/92c062d7-8191-44f8-b711-cc75737077e3.jpg",
+    rating: 4.5,
+    reviews: 98320,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/ef8bd73e-576c-46ad-8f5e-dd86fb78b212.jpg",
     isNew: false,
-    discount: 40,
+    discount: 0,
+    originalTL: 699,
+    saleTL: 699,
   },
   {
     id: 6,
-    title: "Quantum Drift",
-    genre: "Гонки",
+    title: "UFC 5 Ultimate Edition",
+    genre: "Спорт",
     platform: "PS5",
-    price: 4490,
-    rentPrice: 359,
-    rating: 4.7,
-    reviews: 3210,
-    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/e49871f6-d13c-436f-b48c-f2aedf029c88.jpg",
+    price: 12000, // 4.000 ₺ × 3
+    rentPrice: 399,
+    rating: 4.3,
+    reviews: 14560,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/12d96fff-fdf5-4cc0-91fd-36bad3d19b80.jpg",
     isNew: false,
-    discount: 15,
+    discount: 85,
+    originalTL: 4000,
+    saleTL: 600,
+  },
+  {
+    id: 7,
+    title: "Little Nightmares I & II Bundle",
+    genre: "Хоррор",
+    platform: "PS5",
+    price: 6447, // 2.149 ₺ × 3
+    rentPrice: 249,
+    rating: 4.8,
+    reviews: 41200,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/47f3ea5a-0b0b-499b-a1e3-966d2daeae31.jpg",
+    isNew: false,
+    discount: 85,
+    originalTL: 2149,
+    saleTL: 322,
+  },
+  {
+    id: 8,
+    title: "PRAGMATA",
+    genre: "Экшн",
+    platform: "PS5",
+    price: 7737, // 2.579 ₺ × 3
+    rentPrice: 490,
+    rating: 4.4,
+    reviews: 5430,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/c5805a80-fefd-4864-b21b-27b65e97740d.jpg",
+    isNew: true,
+    discount: 0,
+    originalTL: 2579,
+    saleTL: 2579,
+  },
+  {
+    id: 9,
+    title: "REANIMAL",
+    genre: "Хоррор",
+    platform: "PS5",
+    price: 5247, // 1.749 ₺ × 3
+    rentPrice: 290,
+    rating: 4.1,
+    reviews: 3210,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/47f3ea5a-0b0b-499b-a1e3-966d2daeae31.jpg",
+    isNew: true,
+    discount: 20,
+    originalTL: 1749,
+    saleTL: 1399,
+  },
+  {
+    id: 10,
+    title: "EA SPORTS FC 26",
+    genre: "Спорт",
+    platform: "PS5",
+    price: 8700, // 2.899,99 ₺ × 3
+    rentPrice: 380,
+    rating: 4.0,
+    reviews: 9870,
+    image: "https://cdn.poehali.dev/projects/342eafbb-33cc-40ab-8c4b-723ed9ca85cb/files/39baf1bd-cda7-4ef1-85fc-456c9318a099.jpg",
+    isNew: true,
+    discount: 0,
+    originalTL: 2900,
+    saleTL: 2900,
   },
 ];
 
-const GENRES = ["Все", "Экшн", "РПГ", "Гонки", "Спорт", "Шутер", "Приключения"];
+const GENRES = ["Все", "Экшн", "Спорт", "Хоррор", "РПГ", "Гонки", "Приключения"];
 const PLATFORMS = ["Все", "PS5", "PS4"];
 const SORT_OPTIONS = [
   { value: "popular", label: "Популярные" },
@@ -118,9 +191,10 @@ function GameCard({
   mode: Mode;
   onAddToCart: (game: (typeof GAMES)[0]) => void;
 }) {
-  const finalPrice = game.discount
-    ? Math.round(game.price * (1 - game.discount / 100))
+  const salePriceRub = game.discount
+    ? Math.round(game.saleTL * 3)
     : game.price;
+  const finalPrice = salePriceRub;
 
   return (
     <div className="game-card rounded-xl overflow-hidden group">
@@ -174,11 +248,16 @@ function GameCard({
         <div className="flex items-center justify-between">
           <div>
             {mode === "buy" ? (
-              <div className="flex items-end gap-2">
-                <span className="price-tag text-lg">{finalPrice.toLocaleString()} ₽</span>
-                {game.discount > 0 && (
-                  <span className="text-xs text-gray-600 line-through">{game.price.toLocaleString()} ₽</span>
-                )}
+              <div>
+                <div className="flex items-end gap-2">
+                  <span className="price-tag text-lg">{finalPrice.toLocaleString()} ₽</span>
+                  {game.discount > 0 && (
+                    <span className="text-xs text-gray-600 line-through">{game.price.toLocaleString()} ₽</span>
+                  )}
+                </div>
+                <div className="text-[10px] text-gray-600 font-rajdhani mt-0.5">
+                  {game.saleTL.toLocaleString()} ₺ · PS Store TR
+                </div>
               </div>
             ) : (
               <div>
@@ -216,14 +295,14 @@ function CatalogSection({
   const filteredGames = GAMES.filter((g) => {
     const matchGenre = activeGenre === "Все" || g.genre === activeGenre;
     const matchPlatform = activePlatform === "Все" || g.platform === activePlatform;
-    const price = mode === "buy" ? (g.discount ? Math.round(g.price * (1 - g.discount / 100)) : g.price) : g.rentPrice;
+    const price = mode === "buy" ? Math.round(g.saleTL * 3) : g.rentPrice;
     const matchPrice = price <= maxPrice;
     const matchSearch = g.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchGenre && matchPlatform && matchPrice && matchSearch;
   }).sort((a, b) => {
     if (sortBy === "rating") return b.rating - a.rating;
-    if (sortBy === "price_asc") return (mode === "buy" ? a.price : a.rentPrice) - (mode === "buy" ? b.price : b.rentPrice);
-    if (sortBy === "price_desc") return (mode === "buy" ? b.price : b.rentPrice) - (mode === "buy" ? a.price : a.rentPrice);
+    if (sortBy === "price_asc") return (mode === "buy" ? a.saleTL : a.rentPrice) - (mode === "buy" ? b.saleTL : b.rentPrice);
+    if (sortBy === "price_desc") return (mode === "buy" ? b.saleTL : b.rentPrice) - (mode === "buy" ? a.saleTL : a.rentPrice);
     return b.reviews - a.reviews;
   });
 
@@ -375,9 +454,7 @@ function CartSection({
   const total = items.reduce((sum, item) => {
     const price =
       mode === "buy"
-        ? item.discount
-          ? Math.round(item.price * (1 - item.discount / 100))
-          : item.price
+        ? Math.round(item.saleTL * 3)
         : item.rentPrice;
     return sum + price;
   }, 0);
@@ -399,9 +476,7 @@ function CartSection({
         {items.map((item) => {
           const price =
             mode === "buy"
-              ? item.discount
-                ? Math.round(item.price * (1 - item.discount / 100))
-                : item.price
+              ? Math.round(item.saleTL * 3)
               : item.rentPrice;
           return (
             <div key={item.id} className="game-card rounded-xl p-4 flex items-center gap-4">
@@ -411,7 +486,7 @@ function CartSection({
                   {item.platform}
                 </span>
                 <h3 className="font-orbitron text-sm font-bold text-white">{item.title}</h3>
-                <p className="font-rajdhani text-xs text-gray-500 mt-0.5">{mode === "buy" ? "Покупка" : "Аренда/сутки"}</p>
+                <p className="font-rajdhani text-xs text-gray-500 mt-0.5">{mode === "buy" ? `${item.saleTL.toLocaleString()} ₺ · PS Store TR` : "Аренда/сутки"}</p>
               </div>
               <div className="flex items-center gap-3">
                 <span className="price-tag text-base">{price.toLocaleString()} ₽</span>
