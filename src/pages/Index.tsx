@@ -630,11 +630,133 @@ function SupportSection() {
   );
 }
 
+function RegisterModal({ onClose }: { onClose: () => void }) {
+  const [step, setStep] = useState<"phone" | "code">("phone");
+  const [phone, setPhone] = useState("");
+  const [code, setCode] = useState("");
+
+  const formatPhone = (val: string) => {
+    const digits = val.replace(/\D/g, "").slice(0, 11);
+    if (digits.length === 0) return "";
+    let result = "+7";
+    if (digits.length > 1) result += " (" + digits.slice(1, 4);
+    if (digits.length >= 4) result += ") " + digits.slice(4, 7);
+    if (digits.length >= 7) result += "-" + digits.slice(7, 9);
+    if (digits.length >= 9) result += "-" + digits.slice(9, 11);
+    return result;
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay animate-fade-in"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="modal-content rounded-2xl p-8 w-full max-w-sm animate-slide-up">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="font-orbitron text-xl font-bold neon-text-blue">РЕГИСТРАЦИЯ</h2>
+            <p className="font-rajdhani text-gray-500 text-sm mt-0.5">
+              {step === "phone" ? "Введи номер телефона" : "Введи код из SMS"}
+            </p>
+          </div>
+          <button onClick={onClose} className="text-gray-600 hover:text-white transition-colors">
+            <Icon name="X" size={20} />
+          </button>
+        </div>
+
+        <div className="flex gap-2 mb-6">
+          {["phone", "code"].map((s, i) => (
+            <div
+              key={s}
+              className="h-0.5 flex-1 rounded-full transition-all duration-300"
+              style={{
+                background: (step === "phone" && i === 0) || step === "code"
+                  ? "var(--neon-blue)"
+                  : "hsl(var(--muted))",
+                boxShadow: (step === "phone" && i === 0) || step === "code"
+                  ? "0 0 6px var(--neon-blue)"
+                  : "none",
+              }}
+            />
+          ))}
+        </div>
+
+        {step === "phone" ? (
+          <div className="space-y-4">
+            <div>
+              <label className="font-rajdhani text-xs text-gray-500 uppercase tracking-wider block mb-2">
+                Номер телефона
+              </label>
+              <div className="relative">
+                <Icon name="Phone" size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                <input
+                  type="tel"
+                  placeholder="+7 (___) ___-__-__"
+                  value={phone}
+                  onChange={(e) => setPhone(formatPhone(e.target.value))}
+                  className="w-full rounded-xl pl-11 pr-4 py-3.5 text-white placeholder-gray-600 text-sm focus:outline-none transition-all font-rajdhani"
+                  style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "var(--neon-blue)"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,212,255,0.2)"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "hsl(var(--border))"; e.currentTarget.style.boxShadow = "none"; }}
+                />
+              </div>
+            </div>
+            <button
+              onClick={() => phone.replace(/\D/g, "").length === 11 && setStep("code")}
+              className="glow-btn-primary w-full py-3.5 rounded-xl text-sm tracking-widest"
+              style={{ opacity: phone.replace(/\D/g, "").length === 11 ? 1 : 0.5 }}
+            >
+              ПОЛУЧИТЬ КОД
+            </button>
+            <p className="text-center font-rajdhani text-xs text-gray-600">
+              Отправим SMS с кодом подтверждения
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div>
+              <label className="font-rajdhani text-xs text-gray-500 uppercase tracking-wider block mb-2">
+                Код из SMS на номер {phone}
+              </label>
+              <input
+                type="text"
+                placeholder="• • • • • •"
+                maxLength={6}
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                className="w-full rounded-xl px-4 py-4 text-white placeholder-gray-600 text-xl text-center font-orbitron tracking-[0.5em] focus:outline-none transition-all"
+                style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "var(--neon-blue)"; e.currentTarget.style.boxShadow = "0 0 12px rgba(0,212,255,0.2)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "hsl(var(--border))"; e.currentTarget.style.boxShadow = "none"; }}
+                autoFocus
+              />
+            </div>
+            <button
+              onClick={() => code.length === 6 && onClose()}
+              className="glow-btn-primary w-full py-3.5 rounded-xl text-sm tracking-widest"
+              style={{ opacity: code.length === 6 ? 1 : 0.5 }}
+            >
+              ПОДТВЕРДИТЬ
+            </button>
+            <button
+              onClick={() => setStep("phone")}
+              className="w-full font-rajdhani text-xs text-gray-600 hover:text-gray-400 transition-colors"
+            >
+              ← Изменить номер
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const Index = () => {
   const [section, setSection] = useState<Section>("catalog");
   const [mode, setMode] = useState<Mode>("buy");
   const [cart, setCart] = useState<(typeof GAMES)[0][]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   const addToCart = (game: (typeof GAMES)[0]) => {
     setCart((prev) => {
@@ -656,6 +778,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      {showRegister && <RegisterModal onClose={() => setShowRegister(false)} />}
       <nav
         className="sticky top-0 z-50 border-b"
         style={{
@@ -717,6 +840,14 @@ const Index = () => {
                   АРЕНДОВАТЬ
                 </button>
               </div>
+
+              <button
+                onClick={() => setShowRegister(true)}
+                className="glow-btn-blue px-4 py-2 rounded-lg text-xs flex items-center gap-1.5"
+              >
+                <Icon name="UserPlus" size={14} />
+                <span className="hidden sm:inline">Регистрация</span>
+              </button>
 
               <button
                 className="md:hidden text-gray-400 transition-colors"
